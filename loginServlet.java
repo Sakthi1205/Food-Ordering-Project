@@ -1,4 +1,4 @@
-package hi;
+package h1;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,7 +36,8 @@ public class loginServlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		
-		String table_no = request.getParameter("tableNumber");
+		String x = request.getParameter("tableNumber");
+		int table_no = Integer.parseInt(x);
 		String Username = request.getParameter("Username");
 		String PhoneNo = request.getParameter("phoneNumber");
 		String emailId = request.getParameter("emailnumber");
@@ -46,27 +47,35 @@ public class loginServlet extends HttpServlet {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			Connection con = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/mphasis",
+					"jdbc:mysql://localhost:3306/food_order_project",
 					"root",
 					"root@39"
 					);
 			Statement stmt = con.createStatement();
 			
-			ResultSet table = stmt.executeQuery("select * from TableID where id="+table_no);
+			ResultSet table = stmt.executeQuery("select * from table_details where table_id="+table_no);
 			
 			if(!table.next()) {
+				
 				response.sendRedirect("user.html");
 			}else {
 				
-				String sql = "insert into NAME(Username,PhoneNumber,emailId) values(?,?,?)";
+				String sql = "update table_details set name=?,phone_number=?,email_id=? where table_id=?";
 				
 				PreparedStatement ps = con.prepareStatement(sql);
 				ps.setString(1, Username);
 				ps.setString(2, PhoneNo);
 				ps.setString(3, emailId);
+				ps.setInt(4, table_no);
 				
-			}
 			
+			 int i = ps.executeUpdate();
+			   if(i > 0) {
+				   out.println("<h3>Record inserted successfully!</h3>");
+			   }else {
+				   out.println("<h3>Insert failed!</h3>");
+			   }
+			}
 			
 		}catch(Exception e) {
 			out.println("Error: "+e.getMessage());
