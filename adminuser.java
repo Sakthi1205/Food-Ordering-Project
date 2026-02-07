@@ -47,7 +47,7 @@ public class adminuser extends HttpServlet {
 		PrintWriter o=response.getWriter();
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/food_order_project","root","root@39");//change the portal and localhost
+			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mphasis","root","root@39");//change the portal and localhost
 			Statement stmt=con.createStatement();
 			ResultSet rs=stmt.executeQuery("Select * from admin");
 			int f=0;
