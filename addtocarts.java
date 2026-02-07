@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class addtocarts
@@ -55,15 +56,16 @@ public class addtocarts extends HttpServlet {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/food_order_project", "root", "root@39");
+                "jdbc:mysql://localhost:3306/mphasis", "root", "root@39");
 
         PreparedStatement ps =
                 con.prepareStatement("SELECT * FROM menu WHERE fid = ?");
         int tp=0;
-
+        int[] quan = new int[fids.length];
         for (int i = 0; i < fids.length; i++) {
             ps.setInt(1, Integer.parseInt(fids[i]));
            int qty = Integer.parseInt(qtys[i]);
+           quan[i] = qty;
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -77,9 +79,16 @@ public class addtocarts extends HttpServlet {
             }
            
             rs.close();
+            
+            //int[] quan = {qty};
         }
         o.println("<h3>TOTAL PRICE:"+tp+"</h3>");
         o.println("</table>");
+        HttpSession ss=request.getSession();
+        ss.setAttribute("fid", fids);
+        ss.setAttribute("qty", quan);
+        o.println("<a href='menu.jsp'>Back to Menu</a>");
+        o.println("<a href='placed'>Place The Order</a>");
         con.close();
 
     } catch (Exception e) {
