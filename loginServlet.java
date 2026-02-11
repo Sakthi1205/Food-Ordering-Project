@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class loginServlet
@@ -41,6 +42,8 @@ public class loginServlet extends HttpServlet {
 		String Username = request.getParameter("Username");
 		String PhoneNo = request.getParameter("phoneNumber");
 		String emailId = request.getParameter("emailnumber");
+		HttpSession session = request.getSession();
+		session.setAttribute("t_no", table_no);
 		
 		try {
 			
@@ -71,7 +74,7 @@ public class loginServlet extends HttpServlet {
 			
 			 int i = ps.executeUpdate();
 			   if(i > 0) {
-				   out.println("<h3>Record inserted successfully!</h3>");
+				  response.sendRedirect("menu.jsp");
 			   }else {
 				   out.println("<h3>Insert failed!</h3>");
 			   }
