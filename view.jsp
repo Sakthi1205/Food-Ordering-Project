@@ -3,7 +3,6 @@
     <%@ page import= "java.sql.*" %>
 <!DOCTYPE html>
 
-
 <html>
 <head>
 <meta charset="UTF-8">
@@ -38,8 +37,9 @@ while(rs.next())
  %>
  <br><br>
  </table>
- <form action="update.jsp">
+ <form action="Update.jsp">
  <input type="submit" value="Update"></form>
+ <a href = "admin2.html" >Back</a>
 
 </body>
 </html>
