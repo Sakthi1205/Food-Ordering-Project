@@ -40,6 +40,8 @@ public class placed extends HttpServlet {
 		HttpSession ss = request.getSession(false);
 		PrintWriter out = response.getWriter();
 		
+		int table_no = (int) ss.getAttribute("t_no");
+		
 		String[] fid =(String[]) ss.getAttribute("fid");
 		int[] qty = (int[])ss.getAttribute("qty");
 		
@@ -48,10 +50,27 @@ try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			Connection con = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/mphasis",
+					"jdbc:mysql://localhost:3306/food_order_project",
 					"root",
 					"root@39"
 					);
+			String sql1 = "INSERT INTO order_details(table_id , order_id ,item_id ,quantity , price) values(? , ? , ? , ? ,(select price from menu where fid = ?)*?)";
+			
+			PreparedStatement ps1 = con.prepareStatement(sql1);
+			for(int i=0 ; i< fid.length ; i++)
+			{
+				ps1.setInt(1, table_no);
+				ps1.setInt(2, table_no);
+				ps1.setInt(3, Integer.parseInt(fid[i]));
+				ps1.setInt(4, qty[i]);
+				ps1.setInt(5, Integer.parseInt(fid[i]));
+				ps1.setInt(6, qty[i]);
+			
+				ps1.executeUpdate();
+				
+			}
+			 
+			
 			Statement stmt = con.createStatement();
 			
 			 for (int i = 0; i < fid.length; i++) {
