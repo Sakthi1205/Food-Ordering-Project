@@ -88,9 +88,15 @@ while(rs.next())
 }
 
 %>
+</table>
+<br>
 <form action="add.jsp">
 <button type="submit" name="action" value="add">Add Item</button>
 </form>
+
+<br><br>
+
+<a href = "view.jsp" >Back to view</a>
 
 
 
