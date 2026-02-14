@@ -2,16 +2,91 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>User Page</title>
+<title>User Registration</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #11998e, #38ef7d);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 350px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background-color: #11998e;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+input[type="submit"]:hover {
+    background-color: #0d7f73;
+    transform: scale(1.05);
+}
+</style>
+
 </head>
 <body>
-<h2>User Registration</h2>
-<form action="loginServlet" method="post">
-Table ID: <input type="text" name="tableNumber"><br><br>
-Username: <input type="text" name="Username"><br><br>
-Email ID: <input type="text" name="emailnumber"><br><br>
-Phone Number: <input type="text" name="phoneNumber"><br><br>
-<input type="submit" value="Submit">
-</form>
+
+<div class="container">
+    <h2>User Login</h2>
+    <form action="loginServlet" method="post">
+        
+        <label>Table ID:</label>
+        <input type="text" name="tableNumber" required>
+
+        <label>Username:</label>
+        <input type="text" name="Username" required>
+
+        <label>Email ID:</label>
+        <input type="email" name="emailnumber" required>
+
+        <label>Phone Number:</label>
+        <input type="tel" name="phoneNumber" required>
+
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
 </body>
 </html>

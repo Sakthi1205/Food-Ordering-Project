@@ -2,12 +2,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Login</title>
+<title>Dashboard</title>
 
 <style>
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #4e73df, #1cc88a);
+    background: linear-gradient(to right, #36d1dc, #5b86e5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,14 +18,14 @@ body {
 .container {
     background-color: white;
     padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     text-align: center;
-    width: 320px;
+    width: 300px;
 }
 
 h2 {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     color: #333;
 }
 
@@ -35,19 +35,18 @@ form {
 
 input[type="submit"] {
     width: 100%;
-    padding: 12px;
-    background-color: #4e73df;
-    border: none;
-    color: white;
+    padding: 10px;
     font-size: 16px;
-    border-radius: 6px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5b86e5;
+    color: white;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: 0.3s;
 }
 
 input[type="submit"]:hover {
-    background-color: #2e59d9;
-    transform: scale(1.05);
+    background-color: #3f6fd1;
 }
 </style>
 
@@ -55,14 +54,14 @@ input[type="submit"]:hover {
 <body>
 
 <div class="container">
-    <h2>Login Page</h2>
+    <h2>Admin Dashboard</h2>
 
-    <form action="user.html">
-        <input type="submit" value="User Login">
+    <form action="view.jsp">
+        <input type="submit" value="View">
     </form>
 
-    <form action="admin.html">
-        <input type="submit" value="Admin Login">
+    <form action="Bill.jsp">
+        <input type="submit" value="Generate Bill">
     </form>
 </div>
 

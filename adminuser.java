@@ -47,14 +47,14 @@ public class adminuser extends HttpServlet {
 		PrintWriter o=response.getWriter();
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mphasis","root","root@39");//change the portal and localhost
+			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/food_order_project","root","root@39");//change the portal and localhost
 			Statement stmt=con.createStatement();
 			ResultSet rs=stmt.executeQuery("Select * from admin");
 			int f=0;
 			while(rs.next()) {
 				if(id==rs.getInt("id") && name.equals(rs.getString("name")) && pass.equals(rs.getString("password"))) {
 					f=1;
-					response.sendRedirect("view.jsp");//change it
+					response.sendRedirect("admin2.html");//change it
 				}
 			}
 			if(f==0) {

@@ -2,15 +2,86 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>User Page</title>
+<title>Admin Login</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    width: 350px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #667eea;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+input[type="submit"]:hover {
+    background-color: #5a67d8;
+}
+</style>
+
 </head>
 <body>
-<h2>Admin Login</h2>
-<form action="adminuser" method="post">
-User ID: <input type="text" name="id"><br><br>
-Username: <input type="text" name="name"><br><br>
-Password: <input type="text" name="pass"><br><br>
-<input type="submit" value="Submit">
-</form>
+
+<div class="container">
+    <h2>Admin Login</h2>
+    <form action="adminuser" method="post">
+        
+        <label>User ID:</label>
+        <input type="text" name="id" required>
+
+        <label>Username:</label>
+        <input type="text" name="name" required>
+
+        <label>Password:</label>
+        <input type="password" name="pass" required>
+
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
 </body>
 </html>

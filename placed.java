@@ -15,100 +15,127 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- * Servlet implementation class placed
- */
 @WebServlet("/placed")
 public class placed extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    private static final long serialVersionUID = 1L;
+
     public placed() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		response.setContentType("text/html");
-		HttpSession ss = request.getSession(false);
-		PrintWriter out = response.getWriter();
-		
-		int table_no = (int) ss.getAttribute("t_no");
-		
-		String[] fid =(String[]) ss.getAttribute("fid");
-		int[] qty = (int[])ss.getAttribute("qty");
-		
-try {
-			
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			
-			Connection con = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/food_order_project",
-					"root",
-					"root@39"
-					);
-			String sql1 = "INSERT INTO order_details(table_id , order_id ,item_id ,quantity , price) values(? , ? , ? , ? ,(select price from menu where fid = ?)*?)";
-			
-			PreparedStatement ps1 = con.prepareStatement(sql1);
-			for(int i=0 ; i< fid.length ; i++)
-			{
-				ps1.setInt(1, table_no);
-				ps1.setInt(2, table_no);
-				ps1.setInt(3, Integer.parseInt(fid[i]));
-				ps1.setInt(4, qty[i]);
-				ps1.setInt(5, Integer.parseInt(fid[i]));
-				ps1.setInt(6, qty[i]);
-			
-				ps1.executeUpdate();
-				
-			}
-			 
-			
-			Statement stmt = con.createStatement();
-			
-			 for (int i = 0; i < fid.length; i++) {
-				 ResultSet table = stmt.executeQuery("select * from menu where fid="+fid[i]);
-				 
-				if(table.next()&&(table.getInt("quantity")-qty[i]) < 0) {
-					
-//					out.println("<h3>Only "+table.getInt("quantity")+" of "+table.getString("f_item_name")+" is left </h3>");
-//					out.println("<a href='menu.jsp'>Back to Menu");
-					response.sendRedirect("menu.jsp?itemId="+qty[i]);
-					return;
-				}
-			 }
-			 
-			 
-				String sql = "update menu set quantity=(quantity - ?) where fid=?";
-				for (int i = 0; i < fid.length; i++) {
-					PreparedStatement ps = con.prepareStatement(sql);
-					ps.setInt(1, qty[i]);
-					ps.setString(2, fid[i]);
-					ps.executeUpdate();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-				}
-			out.println("<h3>YOUR ORDER PLACED SUCCESSFULLY</h3>");
-		}catch(Exception e) {
-			out.println("Error: "+e.getMessage());
-		}
-		
-		
-	}
+        response.setContentType("text/html");
+        HttpSession ss = request.getSession(false);
+        PrintWriter out = response.getWriter();
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
-		
-	}
+        int table_no = (int) ss.getAttribute("t_no");
+        String[] fid = (String[]) ss.getAttribute("fid");
+        int[] qty = (int[]) ss.getAttribute("qty");
+        String[] items = (String[]) ss.getAttribute("items");
 
+        // Start HTML
+        out.println("<html><head><title>Order Placed</title>");
+
+        // Embedded CSS
+        out.println("<style>");
+        out.println("body { font-family: Arial, sans-serif; background: linear-gradient(to right,#4facfe,#00f2fe); padding:50px; }");
+        out.println(".container { background:white; max-width:800px; margin:auto; padding:30px; border-radius:10px; box-shadow:0 10px 25px rgba(0,0,0,0.3); text-align:center; }");
+        out.println("h2 { color:#333; margin-bottom:20px; }");
+        out.println("table { width:100%; border-collapse:collapse; margin-top:20px; }");
+        out.println("th { background:#00c6ff; color:white; padding:12px; }");
+        out.println("td { padding:10px; text-align:center; }");
+        out.println("tr:nth-child(even) { background:#f2f2f2; }");
+        out.println(".total { text-align:right; font-size:18px; font-weight:bold; margin-top:15px; }");
+        out.println("a { display:inline-block; margin:15px 10px 0 0; padding:10px 20px; background:#00c6ff; color:white; text-decoration:none; border-radius:5px; font-weight:bold; transition:0.3s; }");
+        out.println("a:hover { background:#009fe3; }");
+        out.println("</style>");
+
+        out.println("</head><body><div class='container'>");
+        out.println("<h2> Your Order Summary</h2>");
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/food_order_project",
+                    "root",
+                    "root@39"
+            );
+
+            // Insert order details
+            String sqlInsert = "INSERT INTO order_details(table_id, order_id, item_name, quantity, price) "
+                    + "VALUES(?, ?, ?, ?, (SELECT price FROM menu WHERE fid = ?)*?)";
+
+            PreparedStatement psInsert = con.prepareStatement(sqlInsert);
+            for (int i = 0; i < fid.length; i++) {
+                psInsert.setInt(1, table_no);
+                psInsert.setInt(2, table_no);
+                psInsert.setString(3, items[i]);
+                psInsert.setInt(4, qty[i]);
+                psInsert.setInt(5, Integer.parseInt(fid[i]));
+                psInsert.setInt(6, qty[i]);
+                psInsert.executeUpdate();
+            }
+
+            // Check stock availability
+            Statement stmt = con.createStatement();
+            for (int i = 0; i < fid.length; i++) {
+                ResultSet table = stmt.executeQuery("SELECT * FROM menu WHERE fid=" + fid[i]);
+                if (table.next() && (table.getInt("quantity") - qty[i]) < 0) {
+                    response.sendRedirect("menu.jsp?itemId=" + qty[i]);
+                    return;
+                }
+            }
+
+            // Update stock
+            String sqlUpdate = "UPDATE menu SET quantity=(quantity - ?) WHERE fid=?";
+            for (int i = 0; i < fid.length; i++) {
+                PreparedStatement psUpdate = con.prepareStatement(sqlUpdate);
+                psUpdate.setInt(1, qty[i]);
+                psUpdate.setString(2, fid[i]);
+                psUpdate.executeUpdate();
+            }
+
+            // Display order summary
+            out.println("<table border='1'>");
+            out.println("<tr><th>Food Name</th><th>Quantity</th><th>Price</th></tr>");
+            int total = 0;
+            PreparedStatement psSelect = con.prepareStatement("SELECT price FROM menu WHERE fid=?");
+
+            for (int i = 0; i < fid.length; i++) {
+                psSelect.setInt(1, Integer.parseInt(fid[i]));
+                ResultSet rs = psSelect.executeQuery();
+                if (rs.next()) {
+                    int price = rs.getInt("price") * qty[i];
+                    total += price;
+
+                    out.println("<tr>");
+                   
+                    out.println("<td>" + items[i] + "</td>");
+                    out.println("<td>" + qty[i] + "</td>");
+                    out.println("<td> " + price + "</td>");
+                    out.println("</tr>");
+                }
+                rs.close();
+            }
+            out.println("</table>");
+            out.println("<div class='total'>TOTAL PRICE:  " + total + "</div>");
+            out.println("<h3> YOUR ORDER HAS BEEN PLACED SUCCESSFULLY!</h3>");
+            out.println("<a href='menu.jsp'>Back to Menu</a>");
+
+            con.close();
+
+        } catch (Exception e) {
+            out.println("<h3 style='color:red;'>Error: " + e.getMessage() + "</h3>");
+            out.println("<a href='menu.jsp'>Back to Menu</a>");
+        }
+
+        out.println("</div></body></html>");
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
 }
